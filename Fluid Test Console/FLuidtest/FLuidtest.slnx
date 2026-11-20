@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="FLuidtest/FLuidtest.vcxproj" Id="009a5201-da4c-4af4-9dcf-5cfffa4be8b0" />
+</Solution>
