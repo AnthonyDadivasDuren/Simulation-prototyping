@@ -8,7 +8,7 @@ I started with a small grid of fog densities. Each cell stores a value from `0.0
 
 The finished prototype runs in real time. Move `@` with **WASD** to clear a path through the fog. The trail stays open briefly, then its edges soften and the fog gradually fills back in.
 
-![The player leaves a trail through the ASCII fog as it gradually fills back in](docs/media/Stage-1-ascii-fog.gif)
+<img src="docs/media/Stage-1-ascii-fog.gif" alt="The player leaves a trail through the ASCII fog" width="480">
 
 ### How it developed
 
