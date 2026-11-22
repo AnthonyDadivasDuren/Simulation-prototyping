@@ -24,7 +24,7 @@ I started with this prototype to see whether a simple grid could produce a convi
 Testing it in the console helped me understand how individual fog cells affect their neighbors and how diffusion and refill shape the wake behind the player. 
 It also gave me a simulation I can carry over to later versions and test on larger, more complex grids.
 
-One of the most important lessons was how much the order of updates matter.
+One of the most important lessons was how much the order of updates matters.
 If I changed densities in the same grid I was reading from, some cells would read values that had already changed during that tick.
 I solved this by reading from the current grid and writing to a separate grid, so every cell uses the same starting state.
 
