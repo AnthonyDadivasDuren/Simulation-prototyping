@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="FogWindow/FogWindow.vcxproj" />
+  <Project Path="FogWindow/FogWindow.vcxproj" Id="09a56bdd-be94-416b-add0-ad7eeaf5ff2a" />
 </Solution>
