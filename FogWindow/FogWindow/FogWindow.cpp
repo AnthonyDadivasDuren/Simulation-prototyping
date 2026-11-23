@@ -13,6 +13,7 @@ int main()
     wc.lpszClassName = fogWindow;
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = GetModuleHandleW(nullptr);
+    wc.hbrBackground = GetSysColorBrush(COLOR_WINDOW);
 
     const ATOM registrationResult = RegisterClassW(&wc);
 
@@ -56,6 +57,56 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         return 0;
     }
+
+    if (uMsg == WM_PAINT)
+    {
+        
+        const int cellSize = 32;
+
+        const int gridHeight = 8;
+        const int gridWidth = 8;
+
+        PAINTSTRUCT paint{};
+
+        HDC hdc = BeginPaint(hwnd, &paint);
+
+        HBRUSH hBrushLightGrey = CreateSolidBrush(RGB(190, 190, 190));
+        HBRUSH hBrushDarkGrey = CreateSolidBrush(RGB(90, 90, 90));
+
+        for (int row = 0; row < gridHeight; row++)
+        {
+            for (int column = 0; column < gridWidth; column++)
+            {
+                int top = row * cellSize;
+                int left = column * cellSize;
+                int right = cellSize + left;
+                int bottom = cellSize + top;
+
+                RECT square{ left, top, right, bottom };
+
+                
+
+                if ((row + column) % 2 == 0)
+                {
+                    FillRect(hdc, &square, hBrushLightGrey);
+                }
+                else
+                {
+                    FillRect(hdc, &square, hBrushDarkGrey);
+                }
+
+                
+            }
+        }
+
+        DeleteObject(hBrushLightGrey);
+        DeleteObject(hBrushDarkGrey);
+
+        EndPaint(hwnd, &paint);
+        return 0;
+    }
+
+    
 
     return DefWindowProcW(hwnd, uMsg, wParam, lParam);
 }
