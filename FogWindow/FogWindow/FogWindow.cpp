@@ -1,5 +1,6 @@
 #include <iostream>
 #include <Windows.h>
+#include <vector>
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -13,7 +14,7 @@ int main()
     wc.lpszClassName = fogWindow;
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = GetModuleHandleW(nullptr);
-    wc.hbrBackground = GetSysColorBrush(COLOR_WINDOW);
+    wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
 
     const ATOM registrationResult = RegisterClassW(&wc);
 
@@ -46,8 +47,6 @@ int main()
     }
 
     std::cout << "Message Loop ended.\n";
-    
-   
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -60,18 +59,29 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     if (uMsg == WM_PAINT)
     {
-        
         const int cellSize = 32;
 
         const int gridHeight = 8;
         const int gridWidth = 8;
 
+        const int cellCount = gridWidth * gridHeight;
+
+        int testRow = 3;
+        int testColumn = 2;
+
+        int testRow2 = 4;
+        int testColumn2 = 1;
+
+        std::vector<float> fog(cellCount, 1.0f);
+
+        int testCell = testRow * gridWidth + testColumn;
+        int testCell2 = testRow2 * gridWidth + testColumn2;
+        fog[testCell] = 0.2f;
+        fog[testCell2] = 0.5;
+
         PAINTSTRUCT paint{};
 
         HDC hdc = BeginPaint(hwnd, &paint);
-
-        HBRUSH hBrushLightGrey = CreateSolidBrush(RGB(190, 190, 190));
-        HBRUSH hBrushDarkGrey = CreateSolidBrush(RGB(90, 90, 90));
 
         for (int row = 0; row < gridHeight; row++)
         {
@@ -84,30 +94,25 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 RECT square{ left, top, right, bottom };
 
-                
+                const int index = row * gridWidth + column;
 
-                if ((row + column) % 2 == 0)
-                {
-                    FillRect(hdc, &square, hBrushLightGrey);
-                }
-                else
-                {
-                    FillRect(hdc, &square, hBrushDarkGrey);
-                }
+                const float density = fog[index];
 
-                
+                int brushColor = static_cast<int>(density * 190.0f);
+
+
+                HBRUSH hbrush = CreateSolidBrush(RGB(brushColor, brushColor, brushColor));
+
+                FillRect(hdc, &square, hbrush);
+
+                DeleteObject(hbrush);
             }
         }
-
-        DeleteObject(hBrushLightGrey);
-        DeleteObject(hBrushDarkGrey);
-
         EndPaint(hwnd, &paint);
         return 0;
     }
-
-    
-
     return DefWindowProcW(hwnd, uMsg, wParam, lParam);
 }
+    
+    
 
